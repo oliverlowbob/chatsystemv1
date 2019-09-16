@@ -1,3 +1,6 @@
+// Java implementation for a client
+// Save file as Client.java
+
 import java.io.*;
 import java.net.*;
 import java.util.Scanner;
@@ -39,7 +42,7 @@ public class Client
                     break;
                 }
 
-                // printing date or time as requested by client
+                // Printing answer from handler
                 String received = dis.readUTF();
                 System.out.println(received);
             }

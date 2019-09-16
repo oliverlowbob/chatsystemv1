@@ -1,3 +1,7 @@
+// Java implementation of  Server side
+// It contains two classes : Server and ClientHandler
+// Save file as Server.java
+
 import java.io.*;
 import java.text.*;
 import java.util.*;
@@ -41,6 +45,74 @@ public class Server
                 s.close();
                 e.printStackTrace();
             }
+        }
+    }
+}
+
+// ClientHandler class
+class ClientHandler extends Thread
+{
+
+    final DataInputStream dis;
+    final DataOutputStream dos;
+    final Socket s;
+
+
+    // Constructor
+    public ClientHandler(Socket s, DataInputStream dis, DataOutputStream dos)
+    {
+        this.s = s;
+        this.dis = dis;
+        this.dos = dos;
+    }
+
+    @Override
+    public void run()
+    {
+        String received;
+        String toreturn;
+        while (true)
+        {
+            try {
+
+                // Ask user for message
+                dos.writeUTF("Skriv besked\n"+
+                        "Type Exit to terminate connection.");
+
+                // receive the answer from client
+                received = dis.readUTF();
+
+                if(received.equals("Exit"))
+                {
+                    System.out.println("Client " + this.s + " sends exit...");
+                    System.out.println("Closing this connection.");
+                    this.s.close();
+                    System.out.println("Connection closed");
+                    break;
+                }
+
+
+
+                // write on output stream based on the
+                // answer from the client
+                while(!received.equals("Exit")){
+                        toreturn = received;
+                        dos.writeUTF(toreturn);
+                        break;
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        try
+        {
+            // closing
+            this.dis.close();
+            this.dos.close();
+
+        }catch(IOException e){
+            e.printStackTrace();
         }
     }
 }
