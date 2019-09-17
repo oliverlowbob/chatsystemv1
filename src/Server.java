@@ -22,10 +22,8 @@ public class Server
         ServerSocket serverSocket = new ServerSocket(1337);
         Socket s;
 
-        //boolean til at loope server kører
-        boolean isRunning = true;
 
-        while(isRunning){
+        while(true){
             s = serverSocket.accept();
             System.out.println("Klient modtaget" + s);
 

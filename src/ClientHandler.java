@@ -8,12 +8,11 @@ import java.util.StringTokenizer;
 public class ClientHandler implements Runnable{
 
     Scanner scanner = new Scanner(System.in);
-    static String name;
+    String name;
     final DataInputStream dis;
     final DataOutputStream dos;
     Socket s;
     boolean isloggedin;
-    boolean loop;
 
     public ClientHandler(Socket s, String name,
                          DataInputStream dis, DataOutputStream dos){
@@ -24,12 +23,11 @@ public class ClientHandler implements Runnable{
         this.isloggedin=true;
     }
 
-    public void run()
-            {
+    public void run() {
         String recived;
 
 
-        while(loop=true){
+        while(true){
             //modtager besked og printer ud
             try {
                 recived = dis.readUTF();
@@ -37,18 +35,18 @@ public class ClientHandler implements Runnable{
                 if(recived.equals("logout")){
                     this.isloggedin=false;
                     this.s.close();
-                    loop=false;
+                    break;
                 }
 
 
             StringTokenizer stringTokenizer = new StringTokenizer(recived, "##");
             String msgToSend = stringTokenizer.nextToken();
-            String user = stringTokenizer.nextToken();
+            String client = stringTokenizer.nextToken();
 
             for(ClientHandler ch : Server.vec){
-                if(ch.name.equals(user) && ch.isloggedin==true){
-                    ch.dos.writeUTF(this.name+" ## " + msgToSend);
-                    loop=false;
+                if(ch.name.equals(client) && ch.isloggedin==true){
+                    ch.dos.writeUTF(name+" ## " + msgToSend);
+                    break;
                 }
             }
             } catch (IOException e) {
