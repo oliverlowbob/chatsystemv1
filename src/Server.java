@@ -9,12 +9,7 @@ public class Server
 {
 
     //vector til at gemme aktive clients
-    static Vector<ClientHandler> vec = new Vector<>();
-
-    //tæller variabel til clients
-    static int aktiveBrugere = 0;
-
-
+    static Vector<ClientHandler> vec = new Vector();
 
     public static void main(String[] args)
         throws IOException {
@@ -25,13 +20,14 @@ public class Server
 
         while(true){
             s = serverSocket.accept();
-            System.out.println("Klient modtaget" + s);
 
+            System.out.println("Klient modtaget " + s);
 
             DataInputStream dis = new DataInputStream(s.getInputStream());
             DataOutputStream dos = new DataOutputStream(s.getOutputStream());
+            String userName = dis.readUTF();
 
-            ClientHandler clientHandler = new ClientHandler(s, "client" + aktiveBrugere, dis, dos);
+            ClientHandler clientHandler = new ClientHandler(s, userName, dis, dos);
 
             Thread t = new Thread(clientHandler);
 
@@ -41,11 +37,8 @@ public class Server
 
             //start tråden
             t.start();
-            //increment for ny bruger
-            aktiveBrugere++;
-
-
         }
-
     }
+
+
 }

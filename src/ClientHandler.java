@@ -38,6 +38,13 @@ public class ClientHandler implements Runnable{
                     break;
                 }
 
+                if(recived.equals("active")){
+                    for(ClientHandler ch : Server.vec) {
+                        dos.writeUTF(ch.toString());
+                        break;
+                    }
+                }
+
 
             StringTokenizer stringTokenizer = new StringTokenizer(recived, "##");
             String msgToSend = stringTokenizer.nextToken();
@@ -49,7 +56,8 @@ public class ClientHandler implements Runnable{
                     break;
                 }
             }
-            } catch (IOException e) {
+
+                } catch (IOException e) {
                 e.printStackTrace();
             }
 
@@ -62,6 +70,10 @@ public class ClientHandler implements Runnable{
                 }
 
 
+    }
+    @Override
+    public String toString(){
+        return name;
     }
 
 }
