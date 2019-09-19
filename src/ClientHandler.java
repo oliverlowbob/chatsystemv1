@@ -32,7 +32,7 @@ public class ClientHandler implements Runnable{
             try {
                 recived = dis.readUTF();
                 System.out.println(recived);
-                if(recived.equals("logout")){
+                if(recived.equals("QUIT")){
                     this.isloggedin=false;
                     this.s.close();
                     break;
