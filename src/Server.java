@@ -11,8 +11,6 @@ public class Server
     //vector til at gemme aktive clients
     static Vector<ClientHandler> vec = new Vector();
 
-    //string til at gemme brugernavn
-    static String userName;
 
     public static void main(String[] args)
         throws IOException {
@@ -28,7 +26,7 @@ public class Server
 
             DataInputStream dis = new DataInputStream(s.getInputStream());
             DataOutputStream dos = new DataOutputStream(s.getOutputStream());
-            userName = dis.readUTF();
+            String userName = dis.readUTF();
 
             ClientHandler clientHandler = new ClientHandler(s, userName, dis, dos);
 
