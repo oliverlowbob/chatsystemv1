@@ -45,7 +45,6 @@ public class ClientHandler extends Thread{
 
             StringTokenizer stringTokenizer = new StringTokenizer(recived, "#");
                 String msgToSend = stringTokenizer.nextToken();
-
                 String client = stringTokenizer.nextToken();
 
             for(ClientHandler ch : Server.vec){

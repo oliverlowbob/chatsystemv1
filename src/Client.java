@@ -9,12 +9,7 @@ public class Client
     public static void main(String args[]) throws IOException
     {
         Scanner scanner = new Scanner(System.in);
-
-        // skriv ip og port
-        System.out.println("ip");
-        InetAddress ip = InetAddress.getByName(scanner.nextLine());
-        System.out.println("port");
-        ServerPort = scanner.nextInt();
+        InetAddress ip = getRoute(scanner);
 
         Socket s = new Socket(ip, ServerPort);
         System.out.println("Indtast brugernavn");
@@ -29,9 +24,10 @@ public class Client
                 while (true) {
 
                     // read the message to deliver.
-                    String msg = scanner.nextLine();
 
                     try {
+                        String msg = scanner.nextLine();
+
                         // write on the output stream
                         dos.writeUTF(msg);
                     } catch (IOException e) {
@@ -62,5 +58,14 @@ public class Client
         sendMessage.start();
         readMessage.start();
 
+    }
+
+    public static InetAddress getRoute(Scanner scanner) throws UnknownHostException {
+        // skriv ip og port
+        System.out.println("ip");
+        InetAddress ip = InetAddress.getByName(scanner.nextLine());
+        System.out.println("port");
+        ServerPort = scanner.nextInt();
+        return ip;
     }
 }
