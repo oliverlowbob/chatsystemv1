@@ -4,14 +4,17 @@ import java.util.Scanner;
 
 public class Client
 {
-    final static int ServerPort = 1337;
+    static int ServerPort;
 
-    public static void main(String args[]) throws UnknownHostException, IOException
+    public static void main(String args[]) throws IOException
     {
         Scanner scanner = new Scanner(System.in);
 
-        // få fat i localhost ip
-        InetAddress ip = InetAddress.getByName("localhost");
+        // skriv ip og port
+        System.out.println("ip");
+        InetAddress ip = InetAddress.getByName(scanner.nextLine());
+        System.out.println("port");
+        ServerPort = scanner.nextInt();
 
         Socket s = new Socket(ip, ServerPort);
         System.out.println("Indtast brugernavn");
