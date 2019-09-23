@@ -5,9 +5,8 @@ import java.net.Socket;
 import java.util.Scanner;
 import java.util.StringTokenizer;
 
-public class ClientHandler implements Runnable{
+public class ClientHandler extends Thread{
 
-    Scanner scanner = new Scanner(System.in);
     String name;
     final DataInputStream dis;
     final DataOutputStream dos;
@@ -26,8 +25,7 @@ public class ClientHandler implements Runnable{
     public void run() {
         String recived;
 
-
-        while(true){
+        while(!this.isInterrupted()){
             //modtager besked og printer ud
             try {
                 recived = dis.readUTF();
@@ -41,30 +39,35 @@ public class ClientHandler implements Runnable{
                 if(recived.equals("active")){
                     for(ClientHandler ch : Server.vec) {
                         dos.writeUTF(ch.toString());
-                        break;
                     }
+                    continue;
                 }
 
 
-            StringTokenizer stringTokenizer = new StringTokenizer(recived, "##");
-            String msgToSend = stringTokenizer.nextToken();
-            String client = stringTokenizer.nextToken();
+            StringTokenizer stringTokenizer = new StringTokenizer(recived, "#");
+                String msgToSend = stringTokenizer.nextToken();
+
+                String client = stringTokenizer.nextToken();
 
             for(ClientHandler ch : Server.vec){
                 if(ch.name.equals(client) && ch.isloggedin==true){
-                    ch.dos.writeUTF(name+" ## " + msgToSend);
+                    ch.dos.writeUTF(name+" : " +msgToSend);
                     break;
                 }
             }
 
-                } catch (IOException e) {
+                }
+
+            catch (IOException e) {
                 e.printStackTrace();
+                this.interrupt();
             }
 
         }
                 try {
                     this.dis.close();
                     this.dos.close();
+                    s.close();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
