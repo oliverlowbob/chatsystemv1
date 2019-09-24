@@ -7,6 +7,16 @@ import java.util.Vector;
 
 public class Server
 {
+    private static Server instance;
+
+    private static Server getInstance(){
+        if(instance==null){
+            instance = new Server();
+        }
+        return instance;
+    }
+    private Server() {
+    }
 
     //vector til at gemme aktive clients
     static Vector<ClientHandler> vec = new Vector();

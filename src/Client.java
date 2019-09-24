@@ -4,12 +4,17 @@ import java.util.Scanner;
 
 public class Client
 {
-    static int ServerPort;
+    int ServerPort;
+    InetAddress ip;
 
-    public static void main(String args[]) throws IOException
+    public Client(int serverPort, InetAddress ip) {
+        ServerPort = serverPort;
+        this.ip = ip;
+    }
+
+    public void runClient() throws IOException
     {
         Scanner scanner = new Scanner(System.in);
-        InetAddress ip = getRoute(scanner);
 
         Socket s = new Socket(ip, ServerPort);
         System.out.println("Indtast brugernavn");
@@ -48,8 +53,8 @@ public class Client
                         String msg = dis.readUTF();
                         System.out.println(msg);
                     } catch (IOException e) {
-
-                        e.printStackTrace();
+                        System.out.println("Goodbye");
+                        break;
                     }
                 }
             }
@@ -60,12 +65,6 @@ public class Client
 
     }
 
-    public static InetAddress getRoute(Scanner scanner) throws UnknownHostException {
-        // skriv ip og port
-        System.out.println("ip");
-        InetAddress ip = InetAddress.getByName(scanner.nextLine());
-        System.out.println("port");
-        ServerPort = scanner.nextInt();
-        return ip;
-    }
+
+
 }

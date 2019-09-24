@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.net.Socket;
 import java.util.StringTokenizer;
 
-public class ClientHandler extends Thread{
+public class ClientHandler implements Runnable {
 
     String name;
     final DataInputStream dis;
@@ -24,16 +24,9 @@ public class ClientHandler extends Thread{
     public void run() {
         String recived;
 
-        while(!this.isInterrupted()){
-            //modtager besked og printer ud
+        while(true){
             try {
                 recived = dis.readUTF();
-                System.out.println(recived);
-                if(recived.equals("QUIT")){
-                    this.isloggedin=false;
-                    this.s.close();
-                    break;
-                }
 
                 if(recived.equals("active")){
                     for(ClientHandler ch : Server.vec) {
@@ -42,10 +35,26 @@ public class ClientHandler extends Thread{
                     continue;
                 }
 
+                if(recived.equals("QUIT")){
+                    this.isloggedin=false;
+                    this.s.close();
+                    System.out.println(name + " disconnected");
+                    break;
+                }
+
+
 
             StringTokenizer stringTokenizer = new StringTokenizer(recived, "#");
                 String msgToSend = stringTokenizer.nextToken();
                 String client = stringTokenizer.nextToken();
+
+                if(client.equalsIgnoreCase("all")) {
+                    if (name != client) {
+                        for (ClientHandler ch : Server.vec) {
+                            ch.dos.writeUTF(name + " : " + msgToSend);
+                        }
+                    }
+                }
 
             for(ClientHandler ch : Server.vec){
                 if(ch.name.equals(client) && ch.isloggedin==true){
@@ -58,17 +67,13 @@ public class ClientHandler extends Thread{
 
             catch (IOException e) {
                 e.printStackTrace();
-                this.interrupt();
+
             }
+            //logging funktion
+
 
         }
-                try {
-                    this.dis.close();
-                    this.dos.close();
-                    s.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+
 
 
     }
